@@ -13,10 +13,14 @@ const AppContainer = styled.section`
 	min-height: 100vh;
 `;
 const SearchInput = styled.input`
-	border: 2px solid #A7A37E;
+	border: 2px solid #;
 	border-radius: 5px;
 	font-size: 14px;
 	padding: 10px;
+`;
+const WithoutNews = styled.h2 `
+	text-align: center;
+	color: #A7A37E;
 `;
 
 class App extends Component {
@@ -51,7 +55,7 @@ class App extends Component {
 	};
 
 	render() {
-		let filtered = this.state.persons.filter(item => item.title.includes(this.state.filterString));
+		let filtered = this.state.persons.filter(item => item.title.includes(this.state.filterString) && !item.readed);
 		return (
 			<AppContainer>
 				<SearchInput
@@ -60,7 +64,10 @@ class App extends Component {
 					ref={input => this.search = input}
 				/>
 				{
-					filtered.slice(0, 10).map(person => !person.readed ? <Article toggleVisibleFunc={this.toggleVisible} articleData={person}/> : null)
+					filtered.length > 0 ?
+						filtered.slice(0, 10).map((person, id) => <Article key={id} toggleVisibleFunc={this.toggleVisible} articleData={person}/>)
+						:
+						<WithoutNews>Больше новостей нет</WithoutNews>
 				}
 			</AppContainer>
 		);
