@@ -21,35 +21,38 @@ const WithoutNews = styled.h2`
 	text-align: center;
 	color: #A7A37E;
 `;
-
 class App extends Component {
+	// Компонента запрашивает с сервера json вида [{ "userId": 1 - целое число, "id": 1 целое число,"title": "text" - строка,"body": "text" - строка},...] далее к каждому элементу добавляется флаг readed: false отвечающий за сокрытие прочитанных новостей.
 	state = {
-		persons: [], // список новостей
-		filterString: '' // строка из input
+		persons: [],
+		filterString: ''
 	};
 
 	componentDidMount() {
 		axios.get(`https://jsonplaceholder.typicode.com/posts`)
 			.then(res => {
-				const data = res.data; // получаем данные из Json
+				const data = res.data;
 				const persons = [];
 				data.map(item => {
-					item.readed = false; // перебераем полученный массив и каждому объекту добавляем readed: false
-					persons.push(item) // добавляем этот объект в созданный выше массив
+					item.readed = false;
+					persons.push(item)
 				});
-				this.setState({persons}) // отправляем массив в state
+				this.setState({persons})
 			});
 	};
 
 	handelInput = () => {
+		// отвечает за добавление в стейт строки из инпута
 		this.setState({
-			filterString: this.search.value // отправляем полученную из input строку в state
+			filterString: this.search.value
 		});
 	};
 
-	toggleVisible = (id) => { // id получен из новости
+	toggleVisible = (id) => {
+		// омтечает новость прочитанной путем изменения стостояния readed на true
+		// id новости  в state которая будет отмечена прочитанной - целое число
 		const persons = [...this.state.persons];
-		persons[id - 1] = {...persons[id - 1], readed: true}; // 'id - 1' вычисляем позицию новости в обзем массиве
+		persons[id - 1] = {...persons[id - 1], readed: true};
 		this.setState({persons});
 	};
 
@@ -63,13 +66,13 @@ class App extends Component {
 					ref={input => this.search = input}
 				/>
 				{
-					filtered.length > 0 ? // проверяем длинну отфильтрованных новостей
-						filtered.slice(0, 10).map((person, id) => //выводим первые 10 элементов из отфильтрованных
+					filtered.length > 0 ?
+						filtered.slice(0, 10).map((person, id) =>
 							<Article key={id.toString}
 									 toggleVisibleFunc={this.toggleVisible}
 									 articleData={person}/>)
 						:
-						<WithoutNews>Новостей нет</WithoutNews> // показываем если отфильтрованных новостей нет
+						<WithoutNews>Новостей нет</WithoutNews>
 				}
 			</AppContainer>
 		);
