@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import styled from 'styled-components'
+import styled from 'styled-components';
 
 import axios from 'axios';
 
@@ -28,15 +28,26 @@ class App extends Component {
 	componentDidMount() {
 		axios.get(`https://jsonplaceholder.typicode.com/posts`)
 			.then(res => {
-				const persons = res.data;
-				this.setState({persons});
-			})
+				const data = res.data;
+				const persons = [];
+				data.map(item => {
+					item.readed = false;
+					persons.push(item)
+				});
+				this.setState({persons})
+			});
 	};
 
 	handelInput = () => {
 		this.setState({
 			filterString: this.search.value
 		});
+	};
+
+	toggleVisible = (id) => {
+		const persons = [...this.state.persons];
+		persons[id-1] = { ...persons[id-1], readed: true };
+		this.setState({ persons });
 	};
 
 	render() {
@@ -49,10 +60,7 @@ class App extends Component {
 					ref={input => this.search = input}
 				/>
 				{
-					filtered.length > 0 ?
-						filtered.slice(0, 10).map(person => <Article articleData={person}/>)
-						:
-						<h3>Новостей нет</h3>
+					filtered.slice(0, 10).map(person => !person.readed ? <Article toggleVisibleFunc={this.toggleVisible} articleData={person}/> : null)
 				}
 			</AppContainer>
 		);

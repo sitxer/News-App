@@ -22,26 +22,16 @@ const Button = styled.button`
 `;
 
 class Article extends Component {
-	constructor(props) {
-		super(props);
-		this.state= {
-			active: false,
-		}
-	}
-
-	toggleVisible = () => {
-		this.setState({
-			active: !this.state.active
-		});
-	};
-
 	render() {
 		return (
-			<ArticleWrapper >
+			<ArticleWrapper>
 				<h3>{this.props.articleData.title}</h3>
 				<p>{this.props.articleData.body}</p>
 				<Button
-					onClick={this.toggleVisible}>
+					onClick={
+						() => this.props.toggleVisibleFunc(this.props.articleData.id)
+					}
+				>
 					Прочитал
 				</Button>
 			</ArticleWrapper>
