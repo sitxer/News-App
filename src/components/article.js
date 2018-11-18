@@ -29,7 +29,7 @@ class Article extends Component {
 				<p>{this.props.articleData.body}</p>
 				<Button
 					onClick={
-						() => this.props.toggleVisibleFunc(this.props.articleData.id)
+						() => this.props.toggleVisibleFunc(this.props.articleData.id) // при кликле передаем id этой новости, чтоб скрыть именно это
 					}
 				>
 					Прочитал
